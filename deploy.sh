@@ -1,6 +1,6 @@
 #!/bin/bash
 
-files=("index.html" "js/scripts.js" "css/styles.css" "data.json")
+files=("index.html" "js/scripts.js" "js/d3.min.js" "css/styles.css" "data/data.json")
 
 here="/srv/share/internet-speed-tracker"
 nginx="/var/www/html"
