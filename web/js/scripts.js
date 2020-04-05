@@ -114,7 +114,7 @@ function drawGraph(dataset){
     svg.append("path")
         .datum(dataset)
         .attr("fill", "none")
-        .attr("stroke", "whitesmoke")
+        .attr("stroke", "#BF9A78")
         .attr("stroke-width", 3.5)
         .attr("stroke-miterlimit", 1)
         .attr("stroke-linejoin", "round")
