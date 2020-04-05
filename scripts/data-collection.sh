@@ -1,8 +1,7 @@
 #!/bin/bash
 
-DATA=$HOME/internet-speed-tracker/data/data.json
-LOCK=$HOME/internet-speed-tracker/data/data.lock
-LOG=$HOME/internet-speed-tracker/scripts/error.log
+DATA=/var/www/html/data/data.json
+LOCK=$/var/www/html/data/data.lock
 
 append_empty_data_entry(){
     # function to create an entry with empty fields when speedtest returns an error
@@ -16,7 +15,7 @@ cp $DATA $LOCK
 sed -i '$ s/\]/,/' $LOCK
 
 # Append speedtest data and close bracket
-speedtest --json >> $LOCK 2>> $LOG
+speedtest --json >> $LOCK
 if [ $? = 0 ]; then
     # close array with bracket
     sed -i '$ s/$/]/' $LOCK
