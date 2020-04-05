@@ -1,8 +1,20 @@
-var view = 3;
-var today = new Date();
-today.setHours(today.getHours() + 4);
-var span = new Date();
-span.setDate(span.getDate() - view);
+var view;
+var today;
+var span;
+
+function changeView(length){
+    view = length;
+    today = new Date();
+    today.setHours(today.getHours() + 4);
+    span = new Date();
+    span.setDate(span.getDate() - view);
+    main();
+}
+
+function printAverageSpeed(dataset){
+    d3.select("#avg").text("Average Speed: " + (dataset.reduce((a, b) => a + b, 0)/dataset.length) + " Mbps");
+}
+
 //------------------------1. PREPARATION-------------------------//
 //-----------------------------SVG-------------------------------//
 const width = 840;
@@ -28,15 +40,20 @@ function filterByDate(data){
 }
 
 async function main(){
+    let speedOnly = [];
     dataset = await d3.json("data/data.json");
-    console.log(dataset);
     dataset.forEach(function(item){
         item.download = Math.round(Number(item.download) / 1000 / 1000);
         item.timestamp = d3.timeParse("%Y-%m-%dT%H:%M")(item.timestamp.slice(0,16));
+        speedOnly.push(item.download);
     })
     dataset.filter(filterByDate);
+    dataset.forEach(function(item){
+        speedOnly.push(item.download);
+    });
     prepScales(dataset);
     drawGraph(dataset);
+    printAverageSpeed(speedOnly);
 }
 
 //----------------------------SCALES-----------------------------//
@@ -55,16 +72,15 @@ function prepScales(dataset){
 //-----------------------------AXES------------------------------//
     yaxis = d3.axisLeft().scale(yScale); 
     xaxis = d3.axisBottom()
-    .ticks(d3.timeDay.every(view/7))
-    .tickFormat(d3.timeFormat('%m-%d'))
+    .ticks(d3.utcDay.every(1))
+    .tickFormat(d3.timeFormat('%d'))
     .scale(xScale);
 }
 
-//----------------------------LINES------------------------------//
-   
-
 //-------------------------2. DRAWING----------------------------//
 function drawGraph(dataset){
+    d3.selectAll("g").remove();
+    d3.selectAll("path").remove();
 //-----------------------------AXES------------------------------//
     svg.append("g")
         .attr("class", "axis")

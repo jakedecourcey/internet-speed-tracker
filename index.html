@@ -9,12 +9,16 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 
-<body onload="main()">
+<body onload="changeView(1)">
     <div class="center">
         <h1 class="top-box">Internet Speed Tracker</h1>
-        <div class="box" id="chart"></div>
+        <div class="box" >
+        <div id="chart"></div>
         <h2 id="avg"></h2>
-        <div id="data"></div>
+        </div>
+        <button onclick="changeView(1)">Day</button>
+        <button onclick="changeView(7)">Week</button>
+        <button onclick="changeView(28)">Month</button>
     </div>
     <script src="js/d3.js"></script>
     <script src="js/scripts.js"></script>
