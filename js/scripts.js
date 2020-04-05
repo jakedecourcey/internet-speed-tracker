@@ -1,6 +1,8 @@
 var view;
 var today;
 var span;
+var tickIncrement;
+var tickLabel;
 
 function changeView(length){
     view = length;
@@ -8,11 +10,23 @@ function changeView(length){
     today.setHours(today.getHours() + 4);
     span = new Date();
     span.setDate(span.getDate() - view);
+    if (view <= 2) {
+        tickIncrement = 3;
+        tickLabel = '%H00';
+    }
+    else if (view <=7) {
+        tickIncrement = 24
+        tickLabel = '%d';
+    }
+    else {
+        tickIncrement = 72;
+        tickLabel = '%d';
+    }
     main();
 }
 
 function printAverageSpeed(dataset){
-    d3.select("#avg").text("Average Speed: " + (dataset.reduce((a, b) => a + b, 0)/dataset.length) + " Mbps");
+    d3.select("#avg").text("Average Speed: " + Math.round(dataset.reduce((a, b) => a + b, 0)/dataset.length) + " Mbps");
 }
 
 //------------------------1. PREPARATION-------------------------//
@@ -22,7 +36,6 @@ const height = 500;
 const margin = 25;
 const padding = 5;
 const adj = 50;
-// we are appending SVG first
 const svg = d3.select("#chart").append("svg")
     .attr("preserveAspectRatio", "xMinYMin meet")
     .attr("viewBox", "-"
@@ -36,7 +49,7 @@ const svg = d3.select("#chart").append("svg")
 
 //-----------------------------DATA------------------------------//
 function filterByDate(data){
-    return data.timestamp < span;
+    return data.timestamp > span;
 }
 
 async function main(){
@@ -47,7 +60,7 @@ async function main(){
         item.timestamp = d3.timeParse("%Y-%m-%dT%H:%M")(item.timestamp.slice(0,16));
         speedOnly.push(item.download);
     })
-    dataset.filter(filterByDate);
+    dataset = dataset.filter(filterByDate);
     dataset.forEach(function(item){
         speedOnly.push(item.download);
     });
@@ -66,14 +79,14 @@ var line;
 function prepScales(dataset){
     xScale = d3.scaleUtc().range([0,width]).domain([span, today]).nice();
     yScale = d3.scaleLinear().rangeRound([height, 0]).domain([(0), d3.max(dataset, function(d) {
-                return d.download + 20; })
+                return d.download + 10; })
             ]);
 
 //-----------------------------AXES------------------------------//
     yaxis = d3.axisLeft().scale(yScale); 
     xaxis = d3.axisBottom()
-    .ticks(d3.utcDay.every(1))
-    .tickFormat(d3.timeFormat('%d'))
+    .ticks(d3.utcHour.every(tickIncrement))
+    .tickFormat(d3.timeFormat(tickLabel))
     .scale(xScale);
 }
 
@@ -99,13 +112,13 @@ function drawGraph(dataset){
 
 //----------------------------LINES------------------------------//
     svg.append("path")
-      .datum(dataset)
-      .attr("fill", "whitesmoke")
-      .attr("stroke", "whitesmoke")
-      .attr("stroke-width", 1.5)
-      .attr("stroke-miterlimit", 1)
-      .attr("d", d3.area()
-        .x(function(d) { return xScale(d.timestamp) })
-        .y0(yScale(0))
-        .y1(function(d) { return yScale(d.download) }))
+        .datum(dataset)
+        .attr("fill", "none")
+        .attr("stroke", "whitesmoke")
+        .attr("stroke-width", 3.5)
+        .attr("stroke-miterlimit", 1)
+        .attr("stroke-linejoin", "round")
+        .attr("d", d3.line()
+          .x(function(d) { return xScale(d.timestamp) })
+          .y(function(d) { return yScale(d.download) }))
 }
