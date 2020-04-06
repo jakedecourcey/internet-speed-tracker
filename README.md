@@ -1,6 +1,6 @@
 # internet-speed-tracker
 
-A simple webpage to visualize internet download speeds over time
+A simple webpage to visualize internet download speeds over time. Built with D3.
 
 ### To Deploy
 * Download repo
