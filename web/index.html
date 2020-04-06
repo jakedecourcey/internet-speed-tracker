@@ -13,12 +13,14 @@
     <div class="center">
         <h1 class="top-box">Internet Speed Tracker</h1>
         <div class="box" >
-        <div id="chart"></div>
-        <h2 id="avg"></h2>
+            <div id="chart"></div>
+            <h2 id="avg"></h2>
+            <h2 id="upt"></h2>
         </div>
         <button onclick="changeView(1)">Day</button>
         <button onclick="changeView(7)">Week</button>
         <button onclick="changeView(28)">Month</button>
+        <p>Data is collected at every hour. Dashed lines represent missing data. The average is taken only of data points that are present, and therefore is an average of bandwidth when the internet is available. Uptime reflects all data points, but does not differentiate between local network issues and ISP issues.</p>
     </div>
     <script src="js/d3.js"></script>
     <script src="js/scripts.js"></script>

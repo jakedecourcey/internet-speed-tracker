@@ -29,13 +29,17 @@ function printAverageSpeed(dataset){
     d3.select("#avg").text("Average Speed: " + Math.round(dataset.reduce((a, b) => a + b, 0)/dataset.length) + " Mbps");
 }
 
+function printUptime(dataset, nonZero){
+    d3.select("#upt").text("Uptime: " + Math.round(nonZero.length / dataset.length * 100) + "%");
+}
+
 //------------------------1. PREPARATION-------------------------//
 //-----------------------------SVG-------------------------------//
 const width = 840;
-const height = 500;
+const height = 400;
 const margin = 25;
 const padding = 5;
-const adj = 50;
+const adj = 33;
 const svg = d3.select("#chart").append("svg")
     .attr("preserveAspectRatio", "xMinYMin meet")
     .attr("viewBox", "-"
@@ -58,15 +62,16 @@ async function main(){
     dataset.forEach(function(item){
         item.download = Math.round(Number(item.download) / 1000 / 1000);
         item.timestamp = d3.timeParse("%Y-%m-%dT%H")(item.timestamp.slice(0,13));
-        speedOnly.push(item.download);
     })
     dataset = dataset.filter(filterByDate);
     dataset.forEach(function(item){
         speedOnly.push(item.download);
-    });
+    })
     prepScales(dataset);
     drawGraph(dataset);
-    printAverageSpeed(speedOnly);
+    let nonZero = speedOnly.filter(function(x){return x !== 0;});
+    printAverageSpeed(nonZero);
+    printUptime(speedOnly, nonZero);
 }
 
 //----------------------------SCALES-----------------------------//
