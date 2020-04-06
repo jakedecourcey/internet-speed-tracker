@@ -1,11 +1,11 @@
 #!/bin/bash
 
 DATA=/var/www/html/data/data.json
-LOCK=$/var/www/html/data/data.lock
+LOCK=/var/www/html/data/data.lock
 
 append_empty_data_entry(){
     # function to create an entry with empty fields when speedtest returns an error
-    echo '{"download": "", "upload": "", "ping": "", "server": {"url": "", "lat": "", "lon": "", "name": "", "country": "", "cc": "", "sponsor": "", "id": "", "host": "", "d": "", "latency": ""}, "timestamp": "$(date -u -Ins)", "bytes_sent": "", "bytes_received": "", "share": "", "client": {"ip": "", "lat": "", "lon": "", "isp": "", "isprating": "", "rating": "", "ispdlavg": "", "ispulavg": "", "loggedin": "", "country": ""}}]' >> $LOCK
+    echo '{"download": "", "upload": "", "ping": "", "server": {"url": "", "lat": "", "lon": "", "name": "", "country": "", "cc": "", "sponsor": "", "id": "", "host": "", "d": "", "latency": ""}, "timestamp": "'$(date -u -Ins)'", "bytes_sent": "", "bytes_received": "", "share": "", "client": {"ip": "", "lat": "", "lon": "", "isp": "", "isprating": "", "rating": "", "ispdlavg": "", "ispulavg": "", "loggedin": "", "country": ""}}]' >> $LOCK
 }
 
 # Prevent script from intering with web request

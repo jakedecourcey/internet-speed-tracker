@@ -57,7 +57,7 @@ async function main(){
     dataset = await d3.json("data/data.json");
     dataset.forEach(function(item){
         item.download = Math.round(Number(item.download) / 1000 / 1000);
-        item.timestamp = d3.timeParse("%Y-%m-%dT%H:%M")(item.timestamp.slice(0,16));
+        item.timestamp = d3.timeParse("%Y-%m-%dT%H")(item.timestamp.slice(0,13));
         speedOnly.push(item.download);
     })
     dataset = dataset.filter(filterByDate);
@@ -111,14 +111,29 @@ function drawGraph(dataset){
         .text("Mbps");
 
 //----------------------------LINES------------------------------//
+    var line = d3.line()
+        .x(function(d) { return xScale(d.timestamp) })
+        .y(function(d) { return yScale(d.download) })
+        .defined(function (d) { return d.download > 0; })
+
+    var inverseData = dataset.filter(line.defined());
+
     svg.append("path")
-        .datum(dataset)
+        //.datum(dataset)
         .attr("fill", "none")
         .attr("stroke", "#BF9A78")
         .attr("stroke-width", 3.5)
         .attr("stroke-miterlimit", 1)
         .attr("stroke-linejoin", "round")
-        .attr("d", d3.line()
-          .x(function(d) { return xScale(d.timestamp) })
-          .y(function(d) { return yScale(d.download) }))
+        .attr("d", line(dataset))
+
+    svg.append("path")
+        //.datum(dataset)
+        .attr("fill", "none")
+        .attr("stroke", "#BF9A78")
+        .attr("stroke-width", 3.5)
+        .attr("stroke-miterlimit", 1)
+        .attr("stroke-linejoin", "round")
+        .attr("stroke-dasharray", "10,10")
+        .attr("d", line(inverseData))
 }
