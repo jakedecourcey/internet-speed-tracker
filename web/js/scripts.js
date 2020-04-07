@@ -7,9 +7,9 @@ var tickLabel;
 function changeView(length){
     view = length;
     today = new Date();
-    today.setHours(today.getHours() + 4);
     span = new Date();
     span.setDate(span.getDate() - view);
+    today.setHours(today.getHours() + 4);
     if (view <= 2) {
         tickIncrement = 3;
         tickLabel = '%H00';
@@ -61,7 +61,7 @@ async function main(){
     dataset = await d3.json("data/data.json");
     dataset.forEach(function(item){
         item.download = Math.round(Number(item.download) / 1000 / 1000);
-        item.timestamp = d3.timeParse("%Y-%m-%dT%H")(item.timestamp.slice(0,13));
+        item.timestamp = d3.utcParse("%Y-%m-%dT%H")(item.timestamp.slice(0,13));
     })
     dataset = dataset.filter(filterByDate);
     dataset.forEach(function(item){
@@ -82,7 +82,7 @@ var xaxis;
 var line;
 
 function prepScales(dataset){
-    xScale = d3.scaleUtc().range([0,width]).domain([span, today]).nice();
+    xScale = d3.scaleTime().range([0,width]).domain([span, today]);
     yScale = d3.scaleLinear().rangeRound([height, 0]).domain([(0), d3.max(dataset, function(d) {
                 return d.download + 10; })
             ]);
