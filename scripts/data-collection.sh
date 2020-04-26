@@ -3,6 +3,11 @@
 DATA=/usr/share/nginx/html/data.json
 LOCK=/usr/share/nginx/html/data.lock
 
+# Seed file if necessary
+if [ ! -f $DATA ]; then
+    echo "[" >> $DATA
+fi
+
 append_empty_data_entry(){
     # function to create an entry with empty fields when speedtest returns an error
     echo '{"download": "", "upload": "", "ping": "", "server": {"url": "", "lat": "", "lon": "", "name": "", "country": "", "cc": "", "sponsor": "", "id": "", "host": "", "d": "", "latency": ""}, "timestamp": "'$(date -u -Ins)'", "bytes_sent": "", "bytes_received": "", "share": "", "client": {"ip": "", "lat": "", "lon": "", "isp": "", "isprating": "", "rating": "", "ispdlavg": "", "ispulavg": "", "loggedin": "", "country": ""}}]' >> $LOCK
