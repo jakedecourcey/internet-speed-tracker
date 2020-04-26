@@ -1,7 +1,7 @@
 #!/bin/bash
 
-DATA=/usr/share/nginx/html/data/data.json
-LOCK=/usr/share/nginx/html/data/data.lock
+DATA=/usr/share/nginx/html/data.json
+LOCK=/usr/share/nginx/html/data.lock
 
 append_empty_data_entry(){
     # function to create an entry with empty fields when speedtest returns an error
