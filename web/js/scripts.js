@@ -58,7 +58,7 @@ function filterByDate(data){
 
 async function main(){
     let speedOnly = [];
-    dataset = await d3.json("data/data.json");
+    dataset = await d3.json("data.json");
     dataset.forEach(function(item){
         item.download = Math.round(Number(item.download) / 1000 / 1000);
         item.timestamp = d3.utcParse("%Y-%m-%dT%H")(item.timestamp.slice(0,13));
