@@ -2,6 +2,7 @@
 
 DATA=/var/www/html/data.json
 LOCK=/var/www/html/data.lock
+BACKUP=/srv/share/speed-test-data.json
 
 # Seed file if necessary
 if [ ! -f $DATA ]; then
@@ -31,3 +32,6 @@ fi
 
 # Put the new data in place to be requested
 mv $LOCK $DATA
+
+# Backup data
+cp $DATA $BACKUP
