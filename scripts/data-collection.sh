@@ -1,7 +1,7 @@
 #!/bin/bash
 
-DATA=/usr/share/nginx/html/data.json
-LOCK=/usr/share/nginx/html/data.lock
+DATA=/var/www/html/data.json
+LOCK=/var/www/html/data.lock
 
 # Seed file if necessary
 if [ ! -f $DATA ]; then
